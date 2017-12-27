@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.android.project2.Movie;
 import com.example.android.project2.data.MovieContract.MovieEntry;
 
 /**
