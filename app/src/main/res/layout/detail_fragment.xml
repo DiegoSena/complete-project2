@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            tools:context="com.example.android.project2.DetailActivity">
+            tools:context="com.example.android.project2.ui.DetailActivity">
 
             <TextView
                 android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:id="@+id/detail_textview"
                 android:textStyle="bold"
                 android:textSize="30sp"
-                android:textColor="#fff"
+                android:textColor="@color/title_text_color"
                 />
 
             <LinearLayout
@@ -108,7 +108,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
                     android:padding="20dp"
-                    android:background="#000" />
+                    android:background="@color/line_separator_color" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:padding="20dp"
-                    android:background="#000" />
+                    android:background="@color/line_separator_color" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

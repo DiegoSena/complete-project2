@@ -1,9 +1,13 @@
-package com.example.android.project2;
+package com.example.android.project2.data;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
 
-import com.example.android.project2.data.MovieContract;
+import com.example.android.project2.Utils;
+import com.example.android.project2.data.db.MovieContract;
+import com.example.android.project2.model.Movie;
+import com.example.android.project2.model.Review;
+import com.example.android.project2.model.Trailer;
 
 import java.net.URL;
 import java.util.ArrayList;

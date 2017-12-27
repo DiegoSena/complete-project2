@@ -1,7 +1,15 @@
 package com.example.android.project2;
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
+
+import com.example.android.project2.model.Movie;
+import com.example.android.project2.model.Review;
+import com.example.android.project2.model.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -166,5 +174,14 @@ public class Utils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(sdf.parse(movie.getString("release_date")));
         return calendar.get(Calendar.YEAR);
+    }
+
+    public static boolean internetConectivityIsOn(Activity activity) {
+        ConnectivityManager conMgr = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo i = conMgr.getActiveNetworkInfo();
+        if(i == null || !i.isConnected() || !i.isAvailable()){
+            return false;
+        }
+        return true;
     }
 }

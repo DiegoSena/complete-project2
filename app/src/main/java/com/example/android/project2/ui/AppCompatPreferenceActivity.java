@@ -1,4 +1,4 @@
-package com.example.android.project2;
+package com.example.android.project2.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

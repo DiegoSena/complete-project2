@@ -1,4 +1,4 @@
-package com.example.android.project2;
+package com.example.android.project2.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.android.project2.Utils;
+import com.example.android.project2.data.adapter.MovieAdapter;
+import com.example.android.project2.data.MovieRepository;
+import com.example.android.project2.R;
+import com.example.android.project2.model.Movie;
+import com.example.android.project2.model.Review;
+import com.example.android.project2.model.Trailer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +38,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * Created by diego.guimaraes on 09/10/16.
- */
+import static com.example.android.project2.Utils.internetConectivityIsOn;
+
 public class MoviesFragment extends Fragment {
 
+
+    private GridView moviesGridView;
+    private TextView errorMessage;
     private MovieAdapter movieAdapter;
     private MovieRepository movieRepository;
 
@@ -66,14 +80,20 @@ public class MoviesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.movies_main, container, false);
-        GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
-        gridView.setAdapter(movieAdapter);
+        errorMessage = rootView.findViewById(R.id.error_message);
+        moviesGridView = rootView.findViewById(R.id.gridview_movies);
+        moviesGridView.setAdapter(movieAdapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        moviesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Movie movie = movieAdapter.getItem(position);
-                loadMoveDetails(movie);
+                if(internetConectivityIsOn(getActivity())){
+                    Movie movie = movieAdapter.getItem(position);
+                    loadMoveDetails(movie);
+                }else{
+                    Toast toast = Toast.makeText(getContext(), R.string.no_internet_message, Toast.LENGTH_LONG);
+                    toast.show();
+                }
             }
 
             private void loadMoveDetails(Movie movie) {
@@ -100,17 +120,24 @@ public class MoviesFragment extends Fragment {
     }
 
     private void updateMovies() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-        if ("favorite".equalsIgnoreCase(sharedPreferences.getString(getString(R.string.pref_sort_key),
-                getString(R.string.default_sort_order)))) {
+        if (isFavoriteSortSelected()) {
             movieRepository.retrieveFavoriteMovies().
                     subscribeOn(Schedulers.io()).
                     observeOn(AndroidSchedulers.mainThread()).
-                    subscribe(movies -> setUpAdapter(movies));
+                    subscribe(movies -> {
+                        if(movies != null && movies.size() > 0){
+                            setUpAdapter(movies);
+                            moviesGridView.setVisibility(View.VISIBLE);
+                            errorMessage.setVisibility(View.GONE);
+                        }else{
+                            moviesGridView.setVisibility(View.INVISIBLE);
+                            errorMessage.setText(R.string.no_favorite_message);
+                            errorMessage.setVisibility(View.VISIBLE);
+                        }
+                    });
         } else {
-            if (internetConectivityIsOn()) {
-                movieRepository.retrieveMovies(sharedPreferences.getString(getString(R.string.pref_sort_key),
-                        getString(R.string.default_sort_order))).
+            if (internetConectivityIsOn(getActivity())) {
+                movieRepository.retrieveMovies(sortSelected()).
                         zipWith(movieRepository.retrieveFavoriteMovieIds(), (movies, favoriteIds) -> {
                             for (Movie movie : movies) {
                                 movie.setFavorite(favoriteIds.contains(movie.getId()));
@@ -118,21 +145,29 @@ public class MoviesFragment extends Fragment {
                             return movies;
                         }).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread()).
-                        subscribe(movies -> setUpAdapter(movies));
+                        subscribe(movies -> {
+                            setUpAdapter(movies);
+                            moviesGridView.setVisibility(View.VISIBLE);
+                            errorMessage.setVisibility(View.GONE);
+                        });
+            }else{
+                moviesGridView.setVisibility(View.INVISIBLE);
+                errorMessage.setText(R.string.no_internet_message);
+                errorMessage.setVisibility(View.VISIBLE);
             }
         }
     }
 
-    private boolean internetConectivityIsOn() {
-        ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo i = conMgr.getActiveNetworkInfo();
-        if (i == null)
-            return false;
-        if (!i.isConnected())
-            return false;
-        if (!i.isAvailable())
-            return false;
-        return true;
+    private boolean isFavoriteSortSelected(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        return "favorite".equalsIgnoreCase(sharedPreferences.getString(getString(R.string.pref_sort_key),
+                getString(R.string.default_sort_order)));
+    }
+
+    private String sortSelected(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        return sharedPreferences.getString(getString(R.string.pref_sort_key),
+                getString(R.string.default_sort_order));
     }
 
     public void setUpAdapter(List<Movie> movies) {

@@ -1,8 +1,10 @@
-package com.example.android.project2;
+package com.example.android.project2.data.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.android.project2.R;
 
 class ReviewViewHolder extends RecyclerView.ViewHolder{
     private TextView author;

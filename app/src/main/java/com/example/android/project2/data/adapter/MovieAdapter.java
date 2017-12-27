@@ -1,4 +1,4 @@
-package com.example.android.project2;
+package com.example.android.project2.data.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,9 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.example.android.project2.R;
+import com.example.android.project2.model.Movie;
 import com.squareup.picasso.Picasso;
 
 public class MovieAdapter extends ArrayAdapter<Movie> {
+
+    public static final String IMAGE_BASE_URL_SIZE_W342 = "http://image.tmdb.org/t/p/w342";
 
     public MovieAdapter(Context context, int resource) {
         super(context, 0, resource);
@@ -31,7 +35,7 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
 
         Movie movie = getItem(position);
         if(movie != null){
-            String imageSrc = "http://image.tmdb.org/t/p/w342"+ movie.getPosterPath();
+            String imageSrc = IMAGE_BASE_URL_SIZE_W342 + movie.getPosterPath();
             Picasso.with(getContext()).load(imageSrc).into(viewHolder.imageView);
         }
         return convertView;

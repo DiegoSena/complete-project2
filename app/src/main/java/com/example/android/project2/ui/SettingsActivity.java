@@ -1,4 +1,4 @@
-package com.example.android.project2;
+package com.example.android.project2.ui;
 
 
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+
+import com.example.android.project2.R;
 
 public class SettingsActivity extends AppCompatPreferenceActivity implements Preference.OnPreferenceChangeListener {
 

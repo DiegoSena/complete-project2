@@ -1,10 +1,7 @@
-package com.example.android.project2;
+package com.example.android.project2.ui;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,14 +19,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.project2.data.MovieContract.MovieEntry;
+import com.example.android.project2.R;
+import com.example.android.project2.data.MovieRepository;
+import com.example.android.project2.data.adapter.ReviewAdapter;
+import com.example.android.project2.data.adapter.TrailerAdapter;
+import com.example.android.project2.data.db.MovieContract.MovieEntry;
+import com.example.android.project2.model.Movie;
+import com.example.android.project2.model.Review;
+import com.example.android.project2.model.Trailer;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import static com.example.android.project2.Utils.internetConectivityIsOn;
+
 
 public class DetailFragment extends Fragment implements AdapterClickListener{
 
+    public static final String IMAGE_BASE_URL_SIZE_W342 = "http://image.tmdb.org/t/p/w342/";
+    public static final String YOUTUBE_BASE_URL = "http://www.youtube.com/watch?v=";
     private TrailerAdapter trailerAdapter;
     private ReviewAdapter reviewAdapter;
     private List<Trailer> trailers;
@@ -44,7 +52,7 @@ public class DetailFragment extends Fragment implements AdapterClickListener{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (internetConectivityIsOn()) {
+        if (internetConectivityIsOn(getActivity())) {
             Movie movie = getActivity().getIntent().getParcelableExtra(Movie.PARCELABLE_KEY);
             trailers = getActivity().getIntent().getParcelableArrayListExtra("INTENT_TRAILER_DETAIL");
             reviews = getActivity().getIntent().getParcelableArrayListExtra("INTENT_REVIEW_DETAIL");
@@ -82,7 +90,7 @@ public class DetailFragment extends Fragment implements AdapterClickListener{
         TextView textView = (TextView) rootView.findViewById(R.id.detail_textview);
         textView.setText(movie.getTitle());
         ImageView image = (ImageView) rootView.findViewById(R.id.detail_imageview_poster);
-        Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w342/"+ movie.getPosterPath()).into(image);
+        Picasso.with(getContext()).load(IMAGE_BASE_URL_SIZE_W342 + movie.getPosterPath()).into(image);
         TextView releaseYear = (TextView) rootView.findViewById(R.id.detail_textview_releaseyear);
         releaseYear.setText(""+ movie.getReleaseYear());
         TextView average = (TextView) rootView.findViewById(R.id.detail_textview_average);
@@ -142,22 +150,10 @@ public class DetailFragment extends Fragment implements AdapterClickListener{
         reviewContainer.setVisibility(View.VISIBLE);
     }
 
-    private boolean internetConectivityIsOn() {
-        ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo i = conMgr.getActiveNetworkInfo();
-        if (i == null)
-            return false;
-        if (!i.isConnected())
-            return false;
-        if (!i.isAvailable())
-            return false;
-        return true;
-    }
-
     @Override
     public void onTrailerClick(int position) {
         Trailer trailer = trailerAdapter.getTrailerFromPosition(position);
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + trailer.getKey())));
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_BASE_URL + trailer.getKey())));
 
     }
 }

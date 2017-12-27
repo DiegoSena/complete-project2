@@ -1,9 +1,12 @@
-package com.example.android.project2;
+package com.example.android.project2.data.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.android.project2.R;
+import com.example.android.project2.model.Review;
 
 import java.util.List;
 

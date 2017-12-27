@@ -71,4 +71,6 @@
     <string name="play">Play</string>
     <string name="unmark_favorite">Unmark as Favorite</string>
     <string name="mark_favorite">Mark as Favorite</string>
+    <string name="no_favorite_message">You do not have any favorite movie.</string>
+    <string name="no_internet_message">No internet connection available. Try again later.</string>
 </resources>
