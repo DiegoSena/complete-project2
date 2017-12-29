@@ -25,7 +25,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'THE_MOVIEDB_KEY', '"adedd3c40f510ad57ed4232012782826"'
+        it.buildConfigField 'String', 'THE_MOVIEDB_KEY', '""'
     }
     compileOptions {
         targetCompatibility 1.8

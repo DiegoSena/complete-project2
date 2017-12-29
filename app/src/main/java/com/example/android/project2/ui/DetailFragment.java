@@ -2,12 +2,14 @@ package com.example.android.project2.ui;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,6 +42,7 @@ public class DetailFragment extends BaseFragment implements DetailAdapterClickLi
 
     public static final String IMAGE_BASE_URL_SIZE_W342 = "http://image.tmdb.org/t/p/w342/";
     public static final String YOUTUBE_BASE_URL = "http://www.youtube.com/watch?v=";
+    private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private TrailerAdapter trailerAdapter;
     private ReviewAdapter reviewAdapter;
     private List<Trailer> trailers;
@@ -100,11 +103,13 @@ public class DetailFragment extends BaseFragment implements DetailAdapterClickLi
             getActivity().getContentResolver().delete(MovieEntry.CONTENT_URI,
                     "id=?",
                     new String[]{movie.getId()});
+            movie.setFavorite(false);
             changeButtonText((Button) view, R.string.mark_favorite);
             showToast(R.string.unsaved_as_favorite);
         } else {
             ContentValues values = buildContentValues();
             getContext().getContentResolver().insert(MovieEntry.CONTENT_URI, values);
+            movie.setFavorite(true);
             changeButtonText((Button) view, R.string.unmark_favorite);
             showToast(R.string.saved_as_favorite);
         }
@@ -127,7 +132,7 @@ public class DetailFragment extends BaseFragment implements DetailAdapterClickLi
     }
 
     private void showToast(int message) {
-        Toast toast = Toast.makeText(getActivity(), message, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT);
         toast.show();
     }
 
