@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.android.project2.R;
 
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

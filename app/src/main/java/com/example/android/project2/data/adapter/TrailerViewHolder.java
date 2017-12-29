@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.project2.R;
-import com.example.android.project2.ui.AdapterClickListener;
+import com.example.android.project2.ui.DetailAdapterClickListener;
 
 public class TrailerViewHolder extends RecyclerView.ViewHolder{
 
@@ -22,7 +22,7 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder{
         trailerName.setText(name);
     }
 
-    void setOnClickListener(AdapterClickListener onClickListener, int position){
+    void setOnClickListener(DetailAdapterClickListener onClickListener, int position){
         view.setOnClickListener( v -> onClickListener.onTrailerClick(position));
     }
 }

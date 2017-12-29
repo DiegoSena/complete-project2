@@ -1,47 +1,57 @@
 package com.example.android.project2.data.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 
 import com.example.android.project2.R;
 import com.example.android.project2.model.Movie;
-import com.squareup.picasso.Picasso;
+import com.example.android.project2.ui.MovieAdapterItemClickListener;
 
-public class MovieAdapter extends ArrayAdapter<Movie> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MovieAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
     public static final String IMAGE_BASE_URL_SIZE_W342 = "http://image.tmdb.org/t/p/w342";
+    private final Context context;
+    private final MovieAdapterItemClickListener movieAdapterClickListener;
+    private List<Movie> movies = new ArrayList<>();
 
-    public MovieAdapter(Context context, int resource) {
-        super(context, 0, resource);
+    public MovieAdapter(Context context, MovieAdapterItemClickListener movieAdapterItemClickListener) {
+        this.context = context;
+        this.movieAdapterClickListener = movieAdapterItemClickListener;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolderItem viewHolder;
-
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_movie, parent, false);
-            viewHolder = new ViewHolderItem();
-            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.list_item_movie_imageview);
-
-            convertView.setTag(viewHolder);
-        }else {
-            viewHolder = (ViewHolderItem) convertView.getTag();
-        }
-
-        Movie movie = getItem(position);
-        if(movie != null){
-            String imageSrc = IMAGE_BASE_URL_SIZE_W342 + movie.getPosterPath();
-            Picasso.with(getContext()).load(imageSrc).into(viewHolder.imageView);
-        }
-        return convertView;
+    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_movie, parent, false);
+        return new MovieViewHolder(layoutView);
     }
 
-    static class ViewHolderItem {
-        ImageView imageView;
+    @Override
+    public void onBindViewHolder(MovieViewHolder holder, int position) {
+        final Movie movie = movies.get(position);
+        holder.setItemClickListener(this.movieAdapterClickListener, position);
+        holder.setPoster(IMAGE_BASE_URL_SIZE_W342 + "/" + movie.getPosterPath(), context);
+    }
+
+    @Override
+    public int getItemCount() {
+        return movies.size();
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
+    public void addAll(List<Movie> movies) {
+        this.movies.addAll(movies);
+    }
+
+    public void clear() {
+        this.movies.clear();
     }
 }

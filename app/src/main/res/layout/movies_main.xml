@@ -13,14 +13,14 @@
         android:textSize="20sp"
         android:visibility="gone" />
 
-    <GridView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="auto_fit"
         android:horizontalSpacing="0dp"
         android:gravity="center"
         android:id="@+id/gridview_movies"
+        android:scrollbars="vertical"
         android:padding="0dp">
-    </GridView>
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

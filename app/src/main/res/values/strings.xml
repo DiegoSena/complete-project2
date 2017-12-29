@@ -73,4 +73,6 @@
     <string name="mark_favorite">Mark as Favorite</string>
     <string name="no_favorite_message">You do not have any favorite movie.</string>
     <string name="no_internet_message">No internet connection available. Try again later.</string>
+    <string name="unsaved_as_favorite">Unsaved as favorite</string>
+    <string name="saved_as_favorite">Saved as favorite</string>
 </resources>

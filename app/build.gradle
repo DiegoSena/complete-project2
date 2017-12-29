@@ -6,6 +6,7 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion 26
@@ -24,7 +25,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'THE_MOVIEDB_KEY', '""'
+        it.buildConfigField 'String', 'THE_MOVIEDB_KEY', '"adedd3c40f510ad57ed4232012782826"'
     }
     compileOptions {
         targetCompatibility 1.8
@@ -33,6 +34,10 @@ android {
 }
 
 dependencies {
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile "io.reactivex.rxjava2:rxjava:$rx_version"
+    compile "io.reactivex.rxjava2:rxandroid:$rx_android_version"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -42,6 +47,4 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation "com.android.support:recyclerview-v7:26.1.0"
-    compile "io.reactivex.rxjava2:rxjava:$rx_version"
-    compile "io.reactivex.rxjava2:rxandroid:$rx_android_version"
 }

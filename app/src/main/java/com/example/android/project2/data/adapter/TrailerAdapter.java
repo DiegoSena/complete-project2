@@ -7,16 +7,16 @@ import android.view.ViewGroup;
 
 import com.example.android.project2.R;
 import com.example.android.project2.model.Trailer;
-import com.example.android.project2.ui.AdapterClickListener;
+import com.example.android.project2.ui.DetailAdapterClickListener;
 
 import java.util.List;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerViewHolder>{
 
-    private final AdapterClickListener onClickListener;
+    private final DetailAdapterClickListener onClickListener;
     private List<Trailer> trailers;
 
-    public TrailerAdapter(List<Trailer> trailers, AdapterClickListener onClickListener) {
+    public TrailerAdapter(List<Trailer> trailers, DetailAdapterClickListener onClickListener) {
         this.trailers = trailers;
         this.onClickListener = onClickListener;
     }
